@@ -2,6 +2,7 @@ package net.javaguides.banking.service.impl;
 
 import net.javaguides.banking.dto.AccountDto;
 import net.javaguides.banking.entity.Account;
+import net.javaguides.banking.exceptions.NoAccountFoundException;
 import net.javaguides.banking.mapper.AccountMapper;
 import net.javaguides.banking.repository.AccountRepository;
 import net.javaguides.banking.service.AccountService;
@@ -29,7 +30,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountDto getAccountById(Long id) {
-        Account account = accountRepository.findById(id).orElseThrow(()-> new RuntimeException("Account does not exist"));
+        Account account = accountRepository.findById(id).orElseThrow(()-> new NoAccountFoundException("No account found with id: " + id));
         return AccountMapper.mapToAccountDto(account);
     }
 
@@ -41,7 +42,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountDto deposit(Long id, Double amount) {
-        Account account = accountRepository.findById(id).orElseThrow(()-> new RuntimeException("Account does not exist"));
+        Account account = accountRepository.findById(id).orElseThrow(()-> new NoAccountFoundException("No account found with id: " + id));
         account.setBalance(account.getBalance()+ amount);
         Account savedAccount = accountRepository.save(account);
         return AccountMapper.mapToAccountDto(savedAccount);
@@ -50,7 +51,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountDto withdraw(Long id, Double amount) {
 
-        Account account = accountRepository.findById(id).orElseThrow(()-> new RuntimeException("Account does not exist"));
+        Account account = accountRepository.findById(id).orElseThrow(()-> new NoAccountFoundException("No account found with id: " + id));
 
         if(account.getBalance() < amount){
             throw new RuntimeException("Insufficient Balance");
@@ -62,7 +63,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void deleteAccount(Long id) {
-        Account account = accountRepository.findById(id).orElseThrow(()-> new RuntimeException("Account does not exist"));
+        Account account = accountRepository.findById(id).orElseThrow(()-> new NoAccountFoundException("No account found with id: " + id));
         accountRepository.deleteById(id);
     }
 }

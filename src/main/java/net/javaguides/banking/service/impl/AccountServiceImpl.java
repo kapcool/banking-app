@@ -30,7 +30,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountDto getAccountById(Long id) {
-        Account account = accountRepository.findById(id).orElseThrow(()-> new NoAccountFoundException());
+        Account account = accountRepository.findById(id).orElseThrow(()-> new NoAccountFoundException("No account found with id: " + id));
         return AccountMapper.mapToAccountDto(account);
     }
 
@@ -42,7 +42,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountDto deposit(Long id, Double amount) {
-        Account account = accountRepository.findById(id).orElseThrow(()-> new NoAccountFoundException());
+        Account account = accountRepository.findById(id).orElseThrow(()-> new NoAccountFoundException("No account found with id: " + id));
         account.setBalance(account.getBalance()+ amount);
         Account savedAccount = accountRepository.save(account);
         return AccountMapper.mapToAccountDto(savedAccount);
@@ -51,7 +51,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountDto withdraw(Long id, Double amount) {
 
-        Account account = accountRepository.findById(id).orElseThrow(()-> new NoAccountFoundException());
+        Account account = accountRepository.findById(id).orElseThrow(()-> new NoAccountFoundException("No account found with id: " + id));
 
         if(account.getBalance() < amount){
             throw new RuntimeException("Insufficient Balance");
@@ -63,7 +63,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void deleteAccount(Long id) {
-        Account account = accountRepository.findById(id).orElseThrow(()-> new NoAccountFoundException());
+        Account account = accountRepository.findById(id).orElseThrow(()-> new NoAccountFoundException("No account found with id: " + id));
         accountRepository.deleteById(id);
     }
 }

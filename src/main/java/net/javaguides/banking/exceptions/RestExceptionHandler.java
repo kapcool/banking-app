@@ -13,8 +13,8 @@ import java.util.Date;
 public class RestExceptionHandler {
 
     @ExceptionHandler(value = NoAccountFoundException.class)
-    public ResponseEntity<ApiResponseError> handleNoAccountFoundException(){
-        ApiResponseError error = new ApiResponseError(400, "Account not found", new Date());
-        return  new ResponseEntity<ApiResponseError>(error,HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ApiResponseError> handleNoAccountFoundException(NoAccountFoundException exception){
+        ApiResponseError error = new ApiResponseError(400, exception.getMessage(), new Date());
+        return  new ResponseEntity<ApiResponseError>(error, HttpStatus.BAD_REQUEST);
     }
 }
